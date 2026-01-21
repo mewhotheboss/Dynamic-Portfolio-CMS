@@ -1,0 +1,286 @@
+<?php
+require 'config/database.php';
+
+// hero section
+$sql = "SELECT * FROM hero_section WHERE id = 1";
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    $hero = $result->fetch_assoc();
+} else {
+    die("No hero content found!");
+}
+
+// service section
+$sql2 = "SELECT * FROM service";
+$service_result = $conn->query($sql2);
+
+$services = [];
+while ($row = $service_result->fetch_assoc()) {
+    $services[] = $row;
+}
+
+// stats section
+$sql4 = "SELECT * FROM stats";
+$stats_result = $conn->query($sql4);
+
+$stats = [];
+while ($row2 = $stats_result->fetch_assoc()) {
+    $stats[] = $row2;
+}
+
+// about section
+$sql5 = "SELECT * FROM about WHERE id = 1";
+$about_result = $conn->query($sql5);
+
+if ($about_result->num_rows > 0) {
+    $about = $about_result->fetch_assoc();
+} else {
+    die("No about content found!");
+}
+
+// project section
+$sql6 = "SELECT * FROM projects";
+$projects_result = $conn->query($sql6);
+
+$projects = [];
+while ($row3 = $projects_result->fetch_assoc()) {
+    $projects[] = $row3;
+}
+
+$conn->close();
+
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rahim Uddin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+    <header>
+        <button class="hamburger-btn" aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </header>
+
+    <main>
+        <!-- HERO SECTION -->
+        <section id="hero" class="hero">
+            <div class="hero-container container">
+                <div class="hero-text">
+                    <div class="myname">
+                        <p>I'M <?= $hero['name']; ?></p>
+                    </div>
+                    <h1><?= $hero['title']; ?></h1>
+                    <p><?= $hero['para']; ?></p>
+                    <div class="buttons">
+                        <a href="#projects" class="btn-primary button-secondary">See My Works</a>
+                        <!-- <a href="#" class="btn-play">&#9658;</a> -->
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <img src="assets/img/<?= $hero['image']; ?>" alt="me Photo" width="400" height="400" loading="lazy" decoding="async">
+                </div>
+            </div>
+        </section>
+
+        <!-- SERVICE SECTION -->
+        <section id="services" class="services">
+            <div class="container">
+                <h2>SERVICES</h2>
+                <div class="service-container">
+                    <?php foreach ($services as $service): ?>
+                        <div class="service">
+                            <div class="icon">
+                                <i class="<?= $service['icon']; ?>"></i>
+                            </div>
+                            <h3><?= $service['title']; ?></h3>
+                            <p><?= $service['para']; ?></p>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        </section>
+
+        <!-- STATES SECTION -->
+        <section id="states" class="states">
+            <div class="container">
+                <h2>STATS</h2>
+                <div class="states-container">
+                    <div class="state-grid">
+                        <?php foreach ($stats as $stat): ?>
+                            <div class="state">
+                                <h3><?= $stat['title'] ?></h3>
+                                <h5><?= $stat['subtitle'] ?></h5><br>
+                                <p><?= $stat['para'] ?></p>
+                            </div>
+                        <?php endforeach ?>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABOUT SECTION -->
+        <section id="abouts" class="abouts">
+            <div class="container">
+                <h2>ABOUT</h2>
+                <div class="about-grid-container">
+                    <div class="about-card">
+                        <img src="assets/img/<?= $hero['image']; ?>" alt="me" class="about-img" width="100" height="100" loading="lazy"
+                            decoding="async">
+                        <p class="about-intro-text"><?= $about['card_para']; ?></p>
+                        <div class="about-signature">
+                            <h3><?= $hero['name']; ?></h3>
+                            <h5><?= $about['card_title']; ?></h5>
+                        </div>
+                    </div>
+
+                    <div class="about-content">
+                        <div class="myname">
+                            <p>Hi! This is <?= $hero['name']; ?></p>
+                        </div>
+                        <h3><?= $about['title']; ?></h3>
+                        <p class="about-bio"><?= $about['para']; ?></p>
+                        <div class="buttons about-buttons">
+                            <!-- <a href="#" class="btn-primary button-secondary">Download Resume</a> -->
+                            <a
+                                href="<?= $about['resume'] ?>"
+                                class="btn-primary button-secondary"
+                                target="_blank"
+                                rel="noopener noreferrer">
+                                Download Resume
+                            </a>
+                            <!-- <a href="#" class="button-secondary">Hire Me</a> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROJECTS SECTION -->
+        <section id="projects" class="projects">
+            <div class="container">
+                <h2>PROJECTS</h2>
+                <div class="project-container">
+                    <?php foreach ($projects as $key => $project): ?>
+                        <?php if ($key % 2 == 0): ?>
+                            <div class="project-card">
+                            <?php else: ?>
+                                <div class="project-card reverse">
+                                <?php endif ?>
+                                <div class="project-image">
+                                    <img src="assets/img/<?= $project['image']; ?> ?>" alt="Real Chat Project" loading="lazy" decoding="async">
+                                </div>
+                                <div class="project-info">
+                                    <h3><?= $project['title'] ?></h3>
+                                    <h5><?= $project['subtitle'] ?></h5>
+                                    <p class="project-paragraph"><?= $project['para'] ?></p>
+                                    <div class="project-buttons">
+                                        <!-- <a href="#" class="btn-primary">Know More</a> -->
+                                        <!-- <a href="github.com" class="button-secondary">GitHub ↗</a> -->
+                                        <a
+                                            href="<?= $project['url'] ?>"
+                                            class="button-secondary"
+                                            target="_blank"
+                                            rel="noopener noreferrer">
+                                            Preview ↗
+                                        </a>
+
+                                    </div>
+                                </div>
+                                </div>
+                            <?php endforeach ?>
+                            </div>
+                </div>
+        </section>
+    </main>
+
+    <!-- FOOTER SECTION -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo-col">
+                    <a href="#" class="footer-logo">Rahim</a>
+                    <p>I am a web designer and developer based in Dhaka, Bangladesh. I build websites that combine extraordinary design with high performance.</p>
+                </div>
+                <div class="footer-col footer-links">
+                    <h4>IMPORTANT LINKS</h4>
+                    <!-- PAGE NAVIGATION LINKS -->
+                    <ul>
+                        <li><a href="#hero">Home</a></li>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#states">Stats</a></li>
+                        <li><a href="#abouts">About</a></li>
+                        <li><a href="#projects">Project</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col footer-links">
+                    <h4>CONTACT INFO</h4>
+                    <!-- CONTACT INFORMATION -->
+                    <ul>
+                        <li><a href="mailto:rahim@gmail.com">rahim@gmail.com</a></li>
+                        <li><a href="tel:018000000000">018000000000</a></li>
+                        <li>Dhaka, Bangladesh</li>
+                    </ul>
+                </div>
+                <div class="footer-col social-links">
+                    <h4>SOCIAL LINKS</h4>
+                    <!-- SOCIAL MEDIA LINKS -->
+                    <div class="links">
+                        <span><a href="https://github.com">GitHub</a></span>
+                        <span><a href="https://facebook.com">Facebook</a></span>
+                        <span><a href="https://leetcode.com">LetCode</a></span>
+                        <span><a href="https://linkedin.com">LinkedIn</a></span>
+                        <span><a href="https://codeforces.com">Codeforces</a></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- COPYRIGHT -->
+    <div class="footer-bottom">
+        <div class="container">
+            <p>&copy; Copyright 2025 Sakibul Hasan Rafi. All right Reserved</p>
+            <!-- <a href="#" class="scroll-top" aria-label="Scroll to top">&uarr;</a> -->
+        </div>
+    </div>
+
+    <!-- SCROLL TOP -->
+    <a href="#" class="scroll-top" aria-label="Scroll to top">&uarr;</a>
+
+    <!-- POPUP MENU | TOP OF THE PAGE RIGHT -->
+    <div class="popup-menu">
+        <button class="btn-close" aria-label="Close menu">&times;</button>
+        <nav class="popup-nav">
+            <ul>
+                <li>
+                    <h1>MENU</h1>
+                </li>
+                <li><a href="#hero">Home</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#states">Stats</a></li>
+                <li><a href="#abouts">About</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <script src="assets/js/script.js"></script>
+
+</body>
+
+</html>
